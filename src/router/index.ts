@@ -6,7 +6,7 @@ let router = createRouter({
     {
       path: "/",
       redirect: '/dashboard/resource',
-      component: () => import('@/views/home/index.vue'),
+      component: () => import('@/views/dashboard/index.vue'),
       children: [
         {
           path: "/dashboard/resource",
@@ -111,6 +111,11 @@ let router = createRouter({
       ]
     },
     {
+      path: '/home',
+      name: 'Home',
+      component: ()=> import('@/views/home/index.vue')
+    },
+    {
       path: "/login",
       name: "login",
       component: () => import('@/views/login/index.vue'),
@@ -127,23 +132,24 @@ let router = createRouter({
   }
 });
 
+
 router.beforeEach((to, from, next) => {
   const token = localStorage.getItem('token') || '';
   // 如果用户已登录
   if (token) {
     // 访问登录页则跳回首页
-    if (to.path == "/login") {
+    if (to.path == "/login" || to.path === '/home') {
       next({ path: "/" });
     } else {
       // 如果访问其他页面则放行
       next();
     }
   } else { // 如果用户未登录
-    if (to.path == "/login") {
+    if (to.path == "/login" || to.path === '/home') {
       next();
     } else {
       // 如果访问其他页面则返回登录界面
-      next({ path: "/login" });
+      next({ path: "/home" });
     }
   }
 })
