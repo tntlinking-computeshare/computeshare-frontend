@@ -117,14 +117,11 @@ let isLoop = ref()
 const emit = defineEmits(['changeTabKey'])
 
 const operate = (id: string) => {
-  // 访问实例是跳走，需要带走实例id
-    apiInstanceVncURL(id).then(res => {
-        console.log(res)
-        if(res.code == 200) {
-            window.open(res.data)
-        }
-    })
+    let protocol = window.location.protocol
+    let domain =  window.location.host
 
+  // 访问实例是跳走，需要带走实例id
+    window.open(`${protocol}//vnc.${domain}/vnc_lite.html?host=api.${domain}&instanceId=${id}`)
 }
 
 // 创建实例
@@ -185,7 +182,7 @@ const changeName = async(item: any) => {
   console.log('修改名称:', item)
   changeVisible.value = true;
   handleId.value = item.id;
-  
+
 }
 
 //删除实例
@@ -210,10 +207,10 @@ const getInstanceList = async () => {
       let cpuArr = []
       let memoryArr = []
       cpuArr = item.stats.map((en: any) => {
-        return en.cpuUsage 
+        return en.cpuUsage
       })
       memoryArr = item.stats.map((en: any) => {
-        return en.memoryUsage 
+        return en.memoryUsage
       })
       return { cpuArr, memoryArr, ...item }
     })
